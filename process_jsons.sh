@@ -2,8 +2,8 @@
 
 # Check if the input directory is provided
 if [ -z "$1" ]; then
-  echo "Usage: $0 <directory_of_json_files>"
-  exit 1
+    echo "Usage: $0 <directory_of_json_files>"
+    exit 1
 fi
 
 input_dir="$1"
@@ -18,12 +18,14 @@ input_dir="$1"
 #   -k2,2n sorts by the second field numerically, i.e., the part before the decimal point (e.g., 189514).
 #   -k3,3n sorts numerically by the third field, which is the part after the decimal point (e.g., 302 in 189514.302).
 #
+
+rm -f /tmp/process_jsons.tmp.jsonl
+
 for file in $(find "$input_dir" -type f -name "*.json" | sort -t'_' -k2,2n -k3,3n); do
-  if [ -f "$file" ]; then
-      jq -f transform.jq "$file" >> /tmp/process_jsons.tmp.json
-  fi
+    echo "Processing $file" >&2
+    uv run transform.py < "$file" | jq -c '.[]' >> /tmp/process_jsons.tmp.jsonl
 done
 
-jq -s '.' /tmp/process_jsons.tmp.json
+jq -s '.' /tmp/process_jsons.tmp.jsonl
 
-rm /tmp/process_jsons.tmp.json
+rm /tmp/process_jsons.tmp.jsonl
