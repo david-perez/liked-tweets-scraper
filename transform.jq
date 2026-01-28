@@ -1,12 +1,16 @@
 def parse_twitter_date:
   strptime("%a %b %d %H:%M:%S +0000 %Y") | strftime("%Y-%m-%dT%H:%M:%S+00:00");
 
-.data.user.result.timeline_v2.timeline.instructions[0].entries[]
+.data.user.result.timeline.timeline.instructions[0].entries[]
 | select(.content.entryType == "TimelineTimelineItem")
 | .content.itemContent.tweet_results.result
 | {
-    id: (.rest_id | tonumber),
-    user_id: .core.user_results.result.rest_id | tonumber,
+    # We store these as strings as `jq` represents numbers as 64-bit floats, so
+    # anything larger than 2^53-1 (≈ 9.007e15) can’t be represented exactly,
+    # and these identifiers can be higher.
+    id: .rest_id,
+    user_id: .core.user_results.result.rest_id,
+
     media_array: [
       .legacy.extended_entities.media[]?
       | select(.type == "photo" or .type == "video" or .type == "animated_gif")
