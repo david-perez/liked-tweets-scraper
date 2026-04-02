@@ -106,10 +106,10 @@ Run `uv run main.py --help` for detailed usage information.
 
 The above will save all HTTP response bodies made to the liked tweets endpoint
 under a `response_bodies` directory. The payloads there contain all of the
-downloaded tweets with their associated metadata, but you'll most likely want to
-postprocess and concatenate them into a more digestible format. We provide a
-handy shell script leveraging a [`jq`][jq] transform, which will output them in
-the format showcased in the beginning of this readme document:
+downloaded tweets with their associated metadata, but you'll most likely want
+to postprocess and concatenate them into a more digestible format. We provide a
+handy shell script, which will output them in the format showcased in the
+beginning of this readme document:
 
 ```sh
 ./process_jsons.sh response_bodies
