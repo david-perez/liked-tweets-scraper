@@ -75,7 +75,7 @@ from Firefox's cookies SQLite database into the above JSON format:
 
 ```sh
 # The location of your Firefox cookies database in your system may vary.
-sqlite3 ~/snap/firefox/common/.mozilla/firefox/t2r85i5x.default/cookies.sqlite \
+sqlite3 ~/.mozilla/firefox/o6rzm47w.default-release/cookies.sqlite \
 "SELECT json_group_array(
     json_object(
         'name', name,
@@ -87,7 +87,7 @@ sqlite3 ~/snap/firefox/common/.mozilla/firefox/t2r85i5x.default/cookies.sqlite \
         'sameSite', CASE sameSite WHEN 0 THEN 'None' WHEN 1 THEN 'Lax' WHEN 2 THEN 'Strict' ELSE NULL END
     )
 ) AS cookies
-FROM moz_cookies WHERE host LIKE '%x.com';" | jq --indent 4 'map(.secure = (.secure | if . == 1 then true else false end))' > x.com-cookies.json
+FROM moz_cookies WHERE host = 'x.com' OR host LIKE '%.x.com';" | jq --indent 4 'map(.secure = (.secure | if . == 1 then true else false end))' > x.com-cookies.json
 ```
 
 Usage
