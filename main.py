@@ -96,6 +96,15 @@ def save_response_bodies_from_logs(driver, request_ids_cache):
                 url = response_data.get("url", "")
 
                 if url.startswith(url_prefix):
+                    status = response_data.get("status")
+
+                    if status == 503:
+                        sys.stderr.write(
+                            f"Skipping 503 response for URL: {url} (requestId={request_id})\n"
+                        )
+                        request_ids_cache.append(request_id)
+                        continue
+
                     # Get the response body using `Network.getResponseBody`.
                     response_body = driver.execute_cdp_cmd(
                         "Network.getResponseBody", {"requestId": request_id}
