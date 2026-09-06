@@ -75,7 +75,7 @@ def save_response_bodies_from_logs(driver, request_ids_cache):
     logs = driver.get_log("performance")
 
     # URL prefix to filter.
-    url_prefix = "https://x.com/i/api/graphql/upjmWDJQgPa79Lazh9XWxQ/Likes"
+    url_prefix = "https://x.com/i/api/graphql/xA8fDIbrJfy4ojjjXmSR-A/Likes"
 
     output_dir = "response_bodies/"
     os.makedirs(output_dir, exist_ok=True)
